@@ -56,7 +56,9 @@ class View extends React.Component {
         <ul>
           {this.props.messages.map((msgObject, id) => {
             return (<div key={id}>
-              <li className='msgItem' key={id} onClick={() => this.props.displayDetail(msgObject.msg)}>"{msgObject.msg}" Posted by: {msgObject.author}</li>
+              <li className='msgItem' key={id} onClick={() => this.props.displayDetail(msgObject.msg)}>"{msgObject.msg}"
+                <div className='authorItem'>Posted by: {msgObject.author}</div>
+              </li>
               <br />
             </div>);
           })
