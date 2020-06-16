@@ -8,21 +8,32 @@ class View extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      input: ''
+      input: '',
+      author: ''
     };
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange (event) {
+  handleInputChange (event) {
     this.setState({
       input: event.target.value
     });
   }
 
+  handleAuthorChange (event) {
+    this.setState({
+      author: event.target.value
+    });
+  }
+
   handleSubmit () {
-    console.log('IM HERE');
-    this.props.submitNewMsg(this.state.input);
+    let newMsg = {
+      msg: this.state.input,
+      author: this.state.author
+    };
+    this.props.submitNewMsg(newMsg);
     this.setState({
       input: ''
     });
@@ -37,11 +48,17 @@ class View extends React.Component {
     }
     return (
       <div className='input'>
-        <input type='text' onChange={this.handleChange} value={this.state.input} />
+        <input type='text' placeholder='Type your username...' onChange={this.handleAuthorChange} value={this.state.author} />
+        <br />
+        <input type='text' placeholder='Type your message...' onChange={this.handleInputChange} value={this.state.input} />
+        <br />
         <button className='button' onClick={this.handleSubmit}>Add Message</button>
         <ul>
-          {this.props.messages.map((msg, id) => {
-            return (<div key={id}><li className='msgItem' key={id} onClick={() => this.props.displayDetail(msg)}>{msg}</li><br /></div>);
+          {this.props.messages.map((msgObject, id) => {
+            return (<div key={id}>
+              <li className='msgItem' key={id} onClick={() => this.props.displayDetail(msgObject.msg)}>{msgObject.msg}</li>
+              <br />
+            </div>);
           })
           }
         </ul>

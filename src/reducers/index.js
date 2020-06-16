@@ -1,9 +1,28 @@
 import { combineReducers } from 'redux';
 
-const initialMsgs = ['Statement 1', 'Statement 2', 'Statement 3', 'Statement 4'];
+// const initialMsgs = ['Statement 1', 'Statement 2', 'Statement 3', 'Statement 4'];
+const initialMsgsWithAuthor = [
+  {
+    msg: 'Statement 1',
+    author: 'User A'
+  },
+  {
+    msg: 'Statement 2',
+    author: 'User B'
+  },
+  {
+    msg: 'Statement 3',
+    author: 'User C'
+  },
+  {
+    msg: 'Statement 4',
+    author: 'User D'
+  }
+];
 
 const defaultMessageState = {
-  messages: initialMsgs
+  // NEEDS TO CHANGE: initialMsgs to initialMsgsWithAuthor
+  messages: initialMsgsWithAuthor
 };
 const defaultDetailState = {
   isDetailDisplayed: false,
