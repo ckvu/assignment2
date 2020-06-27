@@ -93,6 +93,7 @@ input[type=text]:focus {
   font-size: 15px;
   font-family: Antic;
   border-radius: 25px;
+  margin-bottom: 15px;
 }
 
 .home {
@@ -102,6 +103,12 @@ input[type=text]:focus {
 
 .input {
 	text-align: center;
+}
+
+.authorItem {
+  font-size: 10px;
+  color: whitesmoke;
+  font-family: Antic;
 }
 
 #image-left {
