@@ -1,8 +1,7 @@
 const Message = require('../models/MessageModel');
 
-const createMsg = (req, res) => {
+const createMsg = async (req, res) => {
   const body = req.body;
-  console.log('~~~~~~~~~~');
 
   if (!body) {
     return res.status(400).json({
@@ -37,8 +36,6 @@ const createMsg = (req, res) => {
 };
 
 const getMsgs = async (req, res) => {
-  console.log('!!!!!!!!!!!');
-
   Message.find({}, (error, msgs) => {
     if (error) {
       return res.status(400).json({
@@ -47,9 +44,9 @@ const getMsgs = async (req, res) => {
       });
     }
     if (!msgs.length) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        error: 'No msgs found'
+        messages: []
       });
     }
     return res.status(200).json({
@@ -59,4 +56,19 @@ const getMsgs = async (req, res) => {
   });
 };
 
-module.exports = { createMsg, getMsgs };
+const deleteMsg = async (req, res) => {
+  Message.deleteOne({ _id: req.params.id }, (error) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'DELETE request made, but failed'
+      });
+    } else {
+      return res.status(201).json({
+        success: true
+      });
+    }
+  });
+};
+
+module.exports = { createMsg, getMsgs, deleteMsg };

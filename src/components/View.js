@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addMsg, fetchMsgs } from '../actions/addMsg';
+import { addMsg, fetchMsgs, deleteMsg } from '../actions/addMsg';
 import turnOnDetail from '../actions/turnOnDetail';
 import DetailedView from './DetailedView';
 
@@ -11,9 +11,11 @@ class View extends React.Component {
       input: '',
       author: ''
     };
+    this.props.fetchInitialMsgs();
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClear = this.handleClear.bind(this);
   }
 
   handleInputChange (event) {
@@ -41,6 +43,14 @@ class View extends React.Component {
     this.props.fetchInitialMsgs();
   }
 
+  handleClear () {
+    // console.log(JSON.stringify(this.props.messages));
+    this.props.messages.forEach(msgObj => {
+      this.props.deleteEachMsg(msgObj);
+    });
+    this.props.fetchInitialMsgs();
+  }
+
   render () {
     if (!this.props.isFetching && this.props.messages.length > 0) {
       let detail = null;
@@ -56,6 +66,7 @@ class View extends React.Component {
           <input type='text' placeholder='Type your message...' onChange={this.handleInputChange} value={this.state.input} />
           <br />
           <button className='button' onClick={this.handleSubmit}>Add Message</button>
+          <button className='button' onClick={this.handleClear}>Clear All Messages</button>
           <ul>
             {this.props.messages.map((msgObject, id) => {
               return (<div key={id}>
@@ -71,8 +82,35 @@ class View extends React.Component {
         </div>
       );
     } else {
-      this.props.fetchInitialMsgs();
-      return null;
+      // this.props.fetchInitialMsgs();
+      let detail = null;
+      if (this.props.isDetailDisplayed) {
+        detail = (
+          <DetailedView msg={this.props.detailToDisplay} />
+        );
+      }
+      return (
+        <div className='input'>
+          <input type='text' placeholder='Type your username...' onChange={this.handleAuthorChange} value={this.state.author} />
+          <br />
+          <input type='text' placeholder='Type your message...' onChange={this.handleInputChange} value={this.state.input} />
+          <br />
+          <button className='button' onClick={this.handleSubmit}>Add Message</button>
+          <button className='button' onClick={this.handleClear}>Clear All Messages</button>
+          {/* <ul>
+            {this.props.messages.map((msgObject, id) => {
+              return (<div key={id}>
+                <li className='msgItem' key={id} onClick={() => this.props.displayDetail(msgObject.message)}>"{msgObject.message}"
+                  <div className='authorItem'>Posted by: {msgObject.author}</div>
+                </li>
+                <br />
+              </div>);
+            })
+            }
+          </ul> */}
+          {detail}
+        </div>
+      );
     }
   }
 }
@@ -93,6 +131,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchInitialMsgs: () => {
       dispatch(fetchMsgs());
+    },
+    deleteEachMsg: (msg) => {
+      dispatch(deleteMsg(msg));
     },
     displayDetail: (selectedMsg) => {
       dispatch(turnOnDetail(selectedMsg));

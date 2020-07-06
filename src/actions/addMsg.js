@@ -1,11 +1,7 @@
 import fetch from 'cross-fetch';
 
 const addMsg = (msg) => {
-  // return {
-  //   type: 'ADD',
-  //   newMsg: msg
-  // };
-  return dispatch => {
+  return () => {
     return fetch(`http://localhost:9000/messages`, {
       method: 'post',
       headers: {
@@ -20,8 +16,6 @@ const addMsg = (msg) => {
     )
       .then(response => {
         let obj = response.json();
-        console.log('~~~~~~~~~~~~~~');
-        console.log('~~~~~~~~~~~~~~' + obj);
         return obj;
       });
   };
@@ -54,16 +48,35 @@ const fetchMsgs = () => {
     )
       .then(response => {
         let obj = response.json();
-        console.log('~~~~~~~~~~~~~~');
-        console.log('~~~~~~~~~~~~~~' + obj);
         return obj;
       })
       .then(json => dispatch(receiveMsgs(json)));
   };
 };
 
+const deleteMsg = (msg) => {
+  console.log('~~~~~~~~~~~~~~' + JSON.stringify(msg._id));
+
+  return dispatch => {
+    return fetch(`http://localhost:9000/messages/${msg._id}`, {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        let obj = response.json();
+        console.log('!!!!!!!!!!!!!!!' + JSON.stringify(obj));
+        return obj;
+      })
+      .then(json => dispatch(requestMsgs()));
+  };
+};
+
 // export default addMsg;
 module.exports = {
   addMsg,
-  fetchMsgs
+  fetchMsgs,
+  deleteMsg
 };
