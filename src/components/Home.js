@@ -13,7 +13,7 @@ class Home extends React.Component {
     return (
       <div className='page home'>
         <Provider store={createStore(rootReducer, {}, applyMiddleware(thunkMiddleware, loggerMiddleware))}>
-          <LoadingBar style={{ backgroundColor: 'blue', height: '5px' }} />
+          <LoadingBar style={{ backgroundColor: 'blueviolet', height: '5px' }} />
           <Container />
         </Provider>
       </div>
