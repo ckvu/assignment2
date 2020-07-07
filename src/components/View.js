@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { addMsg, fetchMsgs, deleteMsg } from '../actions/addMsg';
 import turnOnDetail from '../actions/turnOnDetail';
 import DetailedView from './DetailedView';
@@ -16,6 +17,8 @@ class View extends React.Component {
     this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear = this.handleClear.bind(this);
+    this.load = this.load.bind(this);
+    this.unload = this.unload.bind(this);
   }
 
   handleInputChange (event) {
@@ -44,11 +47,22 @@ class View extends React.Component {
   }
 
   handleClear () {
-    // console.log(JSON.stringify(this.props.messages));
     this.props.messages.forEach(msgObj => {
       this.props.deleteEachMsg(msgObj);
     });
     this.props.fetchInitialMsgs();
+  }
+
+  load () {
+    this.props.startLoading();
+  }
+
+  unload () {
+    this.props.stopLoading();
+  }
+
+  display (msgObject) {
+    this.props.displayDetail(msgObject.message);
   }
 
   render () {
@@ -70,7 +84,13 @@ class View extends React.Component {
           <ul>
             {this.props.messages.map((msgObject, id) => {
               return (<div key={id}>
-                <li className='msgItem' key={id} onClick={() => this.props.displayDetail(msgObject.message)}>"{msgObject.message}"
+                <li className='msgItem' key={id} onClick={() => {
+                  this.load();
+                  setTimeout(() => {
+                    this.display(msgObject);
+                    this.unload();
+                  }, 5000);
+                }}>"{msgObject.message}"
                   <div className='authorItem'>Posted by: {msgObject.author}</div>
                 </li>
                 <br />
@@ -82,7 +102,6 @@ class View extends React.Component {
         </div>
       );
     } else {
-      // this.props.fetchInitialMsgs();
       let detail = null;
       if (this.props.isDetailDisplayed) {
         detail = (
@@ -137,6 +156,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     displayDetail: (selectedMsg) => {
       dispatch(turnOnDetail(selectedMsg));
+    },
+    startLoading: () => {
+      dispatch(showLoading());
+    },
+    stopLoading: () => {
+      dispatch(hideLoading());
     }
   };
 };

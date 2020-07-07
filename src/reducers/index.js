@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { loadingBarReducer } from 'react-redux-loading-bar';
 
 const defaultMessageState = {
   messages: [],
@@ -43,7 +44,8 @@ const detailedViewReducer = (state = defaultDetailState, action) => {
 
 const rootReducer = combineReducers({
   messageView: messageReducer,
-  detailedView: detailedViewReducer
+  detailedView: detailedViewReducer,
+  loadingBar: loadingBarReducer
 });
 
 export default rootReducer;
